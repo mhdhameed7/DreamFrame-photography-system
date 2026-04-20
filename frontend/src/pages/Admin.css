@@ -1,0 +1,177 @@
+/* ── Premium Admin Dashboard ── */
+.admin-layout {
+  background: var(--warm-bg);
+  background-image: radial-gradient(circle at top left, rgba(180, 211, 217, 0.1), transparent 50%),
+                    radial-gradient(circle at bottom right, rgba(189, 166, 206, 0.1), transparent 50%);
+}
+
+.admin-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  color: var(--white);
+  letter-spacing: 0.15em;
+  background: var(--accent);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+/* ── Stats ── */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.admin-stat-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(155, 142, 199, 0.05), inset 0 0 0 1px rgba(255,255,255,1);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--glass);
+  transition: background 0.4s;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 50px rgba(155, 142, 199, 0.1);
+}
+
+.admin-stat-card:hover::before { background: var(--accent); }
+
+.admin-stat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.5rem;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.admin-stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.admin-stat-change {
+  font-size: 0.65rem;
+  margin-top: 1.2rem;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.admin-stat-change.positive { color: var(--sage-dark); }
+.admin-stat-change.attention { color: var(--accent-hover); }
+
+/* ── Data Tables ── */
+.table-container { 
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(155, 142, 199, 0.05), inset 0 0 0 1px rgba(255,255,255,1);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  padding: 1.5rem 1.8rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-align: left;
+  border-bottom: 2px solid rgba(155, 142, 199, 0.1);
+  font-weight: 600;
+  background: transparent;
+}
+
+.data-table td {
+  padding: 1.5rem 1.8rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(155, 142, 199, 0.1);
+  vertical-align: middle;
+}
+
+.data-table tbody tr {
+  transition: background 0.3s;
+}
+
+.data-table tbody tr:hover { background: rgba(255, 255, 255, 0.4); }
+
+.status-badge-inline {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  background: var(--glass);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 8px rgba(155, 142, 199, 0.05);
+}
+
+.status-badge-inline.pending { color: var(--text-muted); background: var(--glass); }
+.status-badge-inline.scheduled { color: var(--accent); background: var(--white); }
+.status-badge-inline.shooting { color: var(--accent-hover); }
+.status-badge-inline.editing { color: var(--sage-dark); background: var(--white); border-color: var(--sage-light); }
+.status-badge-inline.delivered { color: var(--white); background: var(--sage-dark); border-color: var(--sage-dark); }
+
+.status-dropdown {
+  padding: 0.6rem 1rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(155, 142, 199, 0.03);
+}
+
+.status-dropdown:hover,
+.status-dropdown:focus { 
+  border-color: var(--accent); 
+  box-shadow: 0 4px 15px rgba(155, 142, 199, 0.1);
+}
+
+.tracking-btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.1ism;
+  background: var(--white);
+}
+
+@media (max-width: 1024px) {
+  .admin-stats { grid-template-columns: 1fr; }
+  .tab-bar { gap: 1.5rem; overflow-x: auto; padding-bottom: 2px; }
+  .data-table th, .data-table td { padding: 1rem; }
+}

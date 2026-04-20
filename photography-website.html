@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMIÈRE — Fine Art Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F8F4EE;
+    --ivory: #FAF7F2;
+    --charcoal: #1A1A1A;
+    --warm-black: #0D0B09;
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+    --gold-dark: #A67C45;
+    --stone: #8B8178;
+    --muted: #6B6560;
+    --light-stone: #D4CFC9;
+    --white: #FFFFFF;
+    --glass: rgba(255,255,255,0.06);
+    --glass-border: rgba(201,169,110,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--warm-black);
+    color: var(--cream);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 99999;
+    transition: transform 0.15s ease, opacity 0.3s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 99998;
+    transition: transform 0.4s cubic-bezier(.2,.8,.3,1), opacity 0.3s;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+  }
+  a:hover ~ .cursor, button:hover ~ .cursor { transform: translate(-50%,-50%) scale(2); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--warm-black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.8rem 4rem;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(13,11,9,0.92);
+    backdrop-filter: blur(20px);
+    padding: 1.2rem 4rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--cream);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--light-stone); text-decoration: none;
+    transition: color 0.3s; position: relative; padding-bottom: 4px;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1px; background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 0.7rem 1.8rem; background: none;
+    cursor: none; transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--warm-black); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; }
+  .hamburger span { width: 24px; height: 1px; background: var(--cream); transition: all 0.3s; }
+
+  /* PAGE SYSTEM */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ===== HOME PAGE ===== */
+  .hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      linear-gradient(to bottom, rgba(13,11,9,0.3) 0%, rgba(13,11,9,0.1) 40%, rgba(13,11,9,0.7) 100%),
+      url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80') center/cover no-repeat;
+    transform: scale(1.05);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.05); }
+    to { transform: scale(1.12); }
+  }
+  .hero-content {
+    position: relative; z-index: 2; text-align: center;
+    animation: fadeInUp 1.2s ease both;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow {
+    font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+    animation: fadeInUp 1s 0.2s ease both;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 300; line-height: 0.95;
+    color: var(--white); margin-bottom: 2rem;
+    animation: fadeInUp 1s 0.4s ease both;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    font-size: 0.75rem; letter-spacing: 0.15em; color: var(--light-stone);
+    max-width: 400px; margin: 0 auto 3rem;
+    animation: fadeInUp 1s 0.6s ease both;
+  }
+  .hero-btns {
+    display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeInUp 1s 0.8s ease both;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--warm-black);
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 1.1rem 3rem; border: none; cursor: none;
+    transition: all 0.3s ease; text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline {
+    background: none; color: var(--cream); border: 1px solid rgba(248,244,238,0.4);
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 1.1rem 3rem; cursor: none;
+    transition: all 0.3s ease; text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    animation: fadeInUp 1s 1.2s ease both;
+  }
+  .hero-scroll span { font-size: 0.5rem; letter-spacing: 0.3em; color: var(--stone); text-transform: uppercase; }
+  .scroll-line {
+    width: 1px; height: 50px; background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { opacity: 0.3; } 50% { opacity: 1; }
+  }
+
+  /* SECTION BASICS */
+  section { padding: 8rem 4rem; }
+  .section-label {
+    font-size: 0.55rem; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before {
+    content: ''; width: 40px; height: 1px; background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.1;
+    color: var(--cream); margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold-light); }
+
+  /* PORTFOLIO GRID */
+  .portfolio-section { background: var(--charcoal); }
+  .portfolio-header { text-align: center; margin-bottom: 4rem; }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .portfolio-item {
+    aspect-ratio: 3/4; overflow: hidden; position: relative; cursor: none;
+  }
+  .portfolio-item:nth-child(2) { aspect-ratio: 3/5; }
+  .portfolio-item:nth-child(4) { grid-column: span 2; aspect-ratio: 16/9; }
+  .portfolio-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .portfolio-item:hover img { transform: scale(1.06); }
+  .portfolio-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(13,11,9,0.85) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.4s;
+    display: flex; align-items: flex-end; padding: 2rem;
+  }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+  .portfolio-caption { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; }
+
+  /* SERVICES */
+  .services-section { background: var(--warm-black); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    max-width: 1200px; margin: 4rem auto 0;
+  }
+  .service-card {
+    padding: 3.5rem 2.5rem; border: 1px solid var(--glass-border);
+    position: relative; overflow: hidden;
+    transition: all 0.4s ease; background: var(--glass);
+  }
+  .service-card::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--gold); transform: scaleX(0);
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover { background: rgba(201,169,110,0.04); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon { font-size: 2.5rem; margin-bottom: 1.5rem; }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 400; color: var(--cream); margin-bottom: 1rem;
+  }
+  .service-desc { font-size: 0.7rem; line-height: 1.9; color: var(--stone); }
+  .service-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold);
+    text-decoration: none; margin-top: 1.5rem; text-transform: uppercase;
+    transition: gap 0.3s;
+  }
+  .service-link:hover { gap: 1rem; }
+
+  /* TESTIMONIALS */
+  .testimonials-section {
+    background: linear-gradient(135deg, #0D0B09 0%, #1a1510 50%, #0D0B09 100%);
+    text-align: center;
+  }
+  .testimonials-wrapper { max-width: 800px; margin: 4rem auto 0; }
+  .testimonial-slide { display: none; }
+  .testimonial-slide.active { display: block; animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .testimonial-stars { color: var(--gold); font-size: 1rem; letter-spacing: 4px; margin-bottom: 2rem; }
+  .testimonial-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 300; font-style: italic;
+    line-height: 1.6; color: var(--cream); margin-bottom: 2.5rem;
+  }
+  .testimonial-author {
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+  }
+  .testimonial-dots { display: flex; gap: 8px; justify-content: center; margin-top: 3rem; }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--stone); cursor: none; transition: all 0.3s;
+  }
+  .dot.active { background: var(--gold); width: 24px; border-radius: 3px; }
+
+  /* PROCESS */
+  .process-section { background: var(--charcoal); }
+  .process-steps {
+    display: flex; align-items: flex-start; gap: 0;
+    max-width: 900px; margin: 5rem auto 0; position: relative;
+  }
+  .process-step { flex: 1; text-align: center; position: relative; }
+  .process-step::before {
+    content: ''; position: absolute; top: 28px; left: 50%; right: -50%;
+    height: 1px; background: var(--glass-border);
+  }
+  .process-step:last-child::before { display: none; }
+  .step-num {
+    width: 56px; height: 56px; border: 1px solid var(--gold);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--gold);
+  }
+  .step-title { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); margin-bottom: 0.7rem; }
+  .step-desc { font-size: 0.65rem; color: var(--stone); line-height: 1.7; padding: 0 1rem; }
+
+  /* ===== GALLERY PAGE ===== */
+  .gallery-hero {
+    height: 45vh; background:
+      linear-gradient(to bottom, rgba(13,11,9,0.5), rgba(13,11,9,0.8)),
+      url('https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=1920&q=80') center/cover;
+    display: flex; align-items: flex-end; padding: 4rem;
+  }
+  .gallery-hero-content { }
+  .gallery-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 6rem); font-weight: 300;
+    color: var(--white); line-height: 1;
+  }
+  .gallery-filters {
+    display: flex; gap: 0; background: var(--charcoal);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0 4rem; overflow-x: auto;
+  }
+  .filter-btn {
+    padding: 1.2rem 2rem; background: none; border: none;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone); cursor: none; transition: all 0.3s;
+    border-bottom: 2px solid transparent; white-space: nowrap;
+  }
+  .filter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .filter-btn:hover { color: var(--cream); }
+  .masonry-grid {
+    padding: 2px; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2px; background: var(--charcoal);
+  }
+  .masonry-item {
+    overflow: hidden; cursor: none; position: relative;
+    background: var(--glass);
+  }
+  .masonry-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s ease; }
+  .masonry-item:hover img { transform: scale(1.05); }
+  .masonry-item:nth-child(3n+1) { aspect-ratio: 3/4; }
+  .masonry-item:nth-child(3n+2) { aspect-ratio: 4/3; }
+  .masonry-item:nth-child(3n) { aspect-ratio: 1; }
+  .masonry-overlay {
+    position: absolute; inset: 0;
+    background: rgba(13,11,9,0.6);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .masonry-item:hover .masonry-overlay { opacity: 1; }
+  .masonry-expand {
+    width: 50px; height: 50px; border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.2rem;
+    transform: scale(0.7); transition: transform 0.3s;
+  }
+  .masonry-item:hover .masonry-expand { transform: scale(1); }
+
+  /* MODAL */
+  .modal {
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(13,11,9,0.97);
+    display: none; align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .modal.open { display: flex; animation: fadeIn 0.3s ease; }
+  .modal-img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .modal-close {
+    position: absolute; top: 2rem; right: 2rem;
+    background: none; border: 1px solid var(--glass-border);
+    color: var(--cream); width: 48px; height: 48px;
+    font-size: 1.2rem; cursor: none; transition: all 0.3s;
+  }
+  .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+  .modal-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: none; border: 1px solid var(--glass-border);
+    color: var(--cream); width: 48px; height: 48px;
+    font-size: 1rem; cursor: none; transition: all 0.3s;
+  }
+  .modal-nav:hover { border-color: var(--gold); }
+  .modal-prev { left: 2rem; }
+  .modal-next { right: 2rem; }
+
+  /* ===== SERVICES PAGE ===== */
+  .services-hero {
+    height: 50vh;
+    background:
+      linear-gradient(to bottom, rgba(13,11,9,0.4), rgba(13,11,9,0.85)),
+      url('https://images.unsplash.com/photo-1542596594-649edbc13630?w=1920&q=80') center/cover;
+    display: flex; align-items: flex-end; padding: 4rem;
+  }
+  .pricing-section { background: var(--charcoal); padding: 6rem 4rem; }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    max-width: 1100px; margin: 4rem auto 0;
+  }
+  .pricing-card {
+    padding: 3rem 2.5rem; border: 1px solid var(--glass-border);
+    position: relative; transition: all 0.4s; background: var(--glass);
+  }
+  .pricing-card.featured {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(201,169,110,0.08), rgba(201,169,110,0.02));
+  }
+  .pricing-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--warm-black);
+    font-size: 0.5rem; letter-spacing: 0.2em; padding: 0.4rem 1.5rem;
+  }
+  .pricing-tier { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .pricing-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300; color: var(--cream); line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .pricing-price sup { font-size: 1.5rem; vertical-align: top; margin-top: 0.5rem; }
+  .pricing-sub { font-size: 0.6rem; color: var(--stone); margin-bottom: 2rem; }
+  .pricing-divider { width: 40px; height: 1px; background: var(--gold); margin-bottom: 2rem; }
+  .pricing-features { list-style: none; margin-bottom: 2.5rem; }
+  .pricing-features li {
+    font-size: 0.65rem; color: var(--light-stone); padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; gap: 0.8rem; align-items: center;
+  }
+  .pricing-features li::before { content: '✦'; color: var(--gold); font-size: 0.5rem; flex-shrink: 0; }
+  .pricing-features li.unavailable { color: var(--stone); opacity: 0.5; }
+  .pricing-features li.unavailable::before { content: '—'; }
+  .pricing-btn {
+    width: 100%; padding: 1rem; background: none;
+    border: 1px solid var(--gold); color: var(--gold);
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: none; transition: all 0.3s;
+  }
+  .pricing-btn:hover, .pricing-card.featured .pricing-btn {
+    background: var(--gold); color: var(--warm-black);
+  }
+
+  /* COMPARISON TABLE */
+  .comparison-section { background: var(--warm-black); padding: 6rem 4rem; }
+  .comparison-table { width: 100%; max-width: 900px; margin: 4rem auto 0; border-collapse: collapse; }
+  .comparison-table th {
+    padding: 1.2rem 2rem; font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold); text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .comparison-table td {
+    padding: 1.1rem 2rem; font-size: 0.65rem; color: var(--light-stone);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .comparison-table tr:hover td { background: var(--glass); }
+  .check { color: var(--gold); } .cross { color: var(--stone); opacity: 0.4; }
+
+  /* ===== BOOKING PAGE ===== */
+  .booking-hero {
+    height: 40vh;
+    background:
+      linear-gradient(to bottom, rgba(13,11,9,0.5), rgba(13,11,9,0.9)),
+      url('https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1920&q=80') center/cover;
+    display: flex; align-items: flex-end; padding: 4rem;
+  }
+  .booking-layout {
+    display: grid; grid-template-columns: 1fr 380px; gap: 4rem;
+    max-width: 1200px; margin: 0 auto; padding: 6rem 4rem;
+    background: var(--charcoal);
+  }
+  .form-group { margin-bottom: 1.5rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .form-label {
+    display: block; font-size: 0.55rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border); color: var(--cream);
+    padding: 0.9rem 1.2rem; font-size: 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: border-color 0.3s; outline: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--gold);
+    background: rgba(201,169,110,0.03);
+  }
+  .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A96E' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+  .form-select option { background: var(--charcoal); }
+  .form-textarea { resize: vertical; min-height: 120px; }
+  .form-submit {
+    background: var(--gold); color: var(--warm-black); border: none;
+    padding: 1.2rem 3rem; font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; cursor: none; transition: all 0.3s; width: 100%;
+  }
+  .form-submit:hover { background: var(--gold-light); }
+
+  /* CALENDAR */
+  .calendar-widget {
+    border: 1px solid var(--glass-border); padding: 2rem;
+    background: var(--glass);
+  }
+  .cal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .cal-month { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--cream); }
+  .cal-nav { background: none; border: none; color: var(--gold); font-size: 1rem; cursor: none; }
+  .cal-days-header {
+    display: grid; grid-template-columns: repeat(7,1fr);
+    text-align: center; margin-bottom: 0.5rem;
+  }
+  .cal-day-label { font-size: 0.5rem; letter-spacing: 0.1em; color: var(--stone); padding: 0.3rem; }
+  .cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+  .cal-day {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: var(--stone); cursor: none; transition: all 0.2s;
+    border-radius: 0;
+  }
+  .cal-day.other-month { opacity: 0.2; }
+  .cal-day.available { color: var(--cream); cursor: none; }
+  .cal-day.available:hover { background: rgba(201,169,110,0.15); color: var(--gold); }
+  .cal-day.booked { color: var(--stone); opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+  .cal-day.selected { background: var(--gold); color: var(--warm-black); }
+  .cal-day.today { border: 1px solid var(--gold-dark); color: var(--gold); }
+  .cal-legend { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.55rem; color: var(--stone); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* CONFIRMATION */
+  .confirmation-msg {
+    text-align: center; padding: 4rem 2rem;
+    border: 1px solid var(--gold); max-width: 600px;
+    margin: 4rem auto; display: none; background: rgba(201,169,110,0.05);
+  }
+  .confirmation-msg.show { display: block; animation: fadeInUp 0.5s ease; }
+  .confirmation-icon { font-size: 3rem; color: var(--gold); margin-bottom: 1.5rem; }
+  .confirmation-msg h3 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; margin-bottom: 1rem; }
+  .confirmation-msg p { font-size: 0.7rem; color: var(--stone); line-height: 1.8; }
+
+  /* ===== ABOUT PAGE ===== */
+  .about-hero {
+    height: 60vh;
+    background:
+      linear-gradient(to right, rgba(13,11,9,0.9) 40%, rgba(13,11,9,0.3)),
+      url('https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1920&q=80') center/cover;
+    display: flex; align-items: center; padding: 4rem;
+  }
+  .about-hero-content { max-width: 500px; }
+  .about-story {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; max-width: 1200px; margin: 0 auto;
+    padding: 8rem 4rem; background: var(--charcoal);
+  }
+  .about-story-img { position: relative; }
+  .about-story-img img { width: 100%; height: 600px; object-fit: cover; }
+  .about-story-img::after {
+    content: ''; position: absolute;
+    top: 2rem; left: 2rem; right: -2rem; bottom: -2rem;
+    border: 1px solid var(--gold); z-index: -1;
+  }
+  .about-text p { font-size: 0.75rem; line-height: 2; color: var(--stone); margin-bottom: 1.5rem; }
+  .about-stats {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    background: var(--warm-black);
+  }
+  .stat-item { padding: 3rem 2rem; text-align: center; border: 1px solid var(--glass-border); }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--gold); line-height: 1; }
+  .stat-label { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); margin-top: 0.5rem; }
+
+  /* ===== REVIEWS PAGE ===== */
+  .reviews-hero {
+    height: 40vh;
+    background:
+      linear-gradient(to bottom, rgba(13,11,9,0.4), rgba(13,11,9,0.9)),
+      url('https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=1920&q=80') center/cover;
+    display: flex; align-items: flex-end; padding: 4rem;
+  }
+  .reviews-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    max-width: 1200px; margin: 4rem auto 0; padding: 0;
+  }
+  .review-card {
+    padding: 2.5rem; border: 1px solid var(--glass-border);
+    background: var(--glass); transition: all 0.3s;
+  }
+  .review-card:hover { border-color: var(--gold-dark); }
+  .review-stars { color: var(--gold); font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 1.2rem; }
+  .review-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem; font-style: italic; line-height: 1.7;
+    color: var(--cream); margin-bottom: 1.5rem;
+  }
+  .review-author-wrap { display: flex; align-items: center; gap: 1rem; }
+  .review-avatar {
+    width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
+    border: 1px solid var(--gold);
+  }
+  .review-author-name { font-size: 0.65rem; letter-spacing: 0.1em; color: var(--cream); }
+  .review-author-type { font-size: 0.55rem; color: var(--gold); margin-top: 2px; }
+
+  /* BEFORE/AFTER */
+  .before-after-section { background: var(--warm-black); padding: 6rem 4rem; text-align: center; }
+  .ba-container {
+    position: relative; max-width: 800px; margin: 4rem auto 0;
+    overflow: hidden; user-select: none;
+  }
+  .ba-after { width: 100%; display: block; }
+  .ba-before-wrap {
+    position: absolute; top: 0; left: 0; bottom: 0;
+    overflow: hidden; width: 50%;
+    transition: width 0s;
+  }
+  .ba-before { width: 800px; max-width: none; display: block; }
+  .ba-slider {
+    position: absolute; top: 0; bottom: 0; left: 50%;
+    transform: translateX(-50%); width: 2px; background: var(--gold);
+    cursor: ew-resize;
+  }
+  .ba-handle {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--gold); border: 3px solid white;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--warm-black); font-size: 0.7rem; font-weight: 700;
+  }
+  .ba-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 1rem; font-size: 0.55rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--stone);
+  }
+
+  /* ===== CONTACT PAGE ===== */
+  .contact-hero {
+    height: 40vh;
+    background:
+      linear-gradient(to bottom, rgba(13,11,9,0.4), rgba(13,11,9,0.85)),
+      url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1920&q=80') center/cover;
+    display: flex; align-items: flex-end; padding: 4rem;
+  }
+  .contact-layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    background: var(--charcoal);
+  }
+  .contact-info { padding: 6rem 4rem; border-right: 1px solid var(--glass-border); }
+  .contact-form-wrap { padding: 6rem 4rem; }
+  .contact-detail { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2.5rem; }
+  .contact-detail-icon { font-size: 1.3rem; color: var(--gold); flex-shrink: 0; margin-top: 0.1rem; }
+  .contact-detail-label { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .contact-detail-val { font-size: 0.75rem; color: var(--light-stone); }
+  .social-links { display: flex; gap: 1rem; margin-top: 3rem; }
+  .social-link {
+    width: 42px; height: 42px; border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--stone); font-size: 0.9rem; text-decoration: none;
+    transition: all 0.3s;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); }
+  .map-embed {
+    width: 100%; height: 250px;
+    border: 1px solid var(--glass-border); overflow: hidden;
+    margin-top: 2rem; position: relative;
+    background: linear-gradient(135deg, #1a1a1a, #111);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .map-placeholder { text-align: center; color: var(--stone); }
+  .map-placeholder-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .map-placeholder p { font-size: 0.6rem; letter-spacing: 0.15em; }
+
+  /* ===== CLIENT DASHBOARD ===== */
+  .dashboard-layout {
+    display: grid; grid-template-columns: 260px 1fr;
+    min-height: 100vh; background: var(--warm-black);
+  }
+  .sidebar {
+    background: var(--charcoal); padding: 2rem 0;
+    border-right: 1px solid var(--glass-border);
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 1rem 1.5rem 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; letter-spacing: 0.2em; color: var(--cream);
+    border-bottom: 1px solid var(--glass-border); margin-bottom: 1.5rem;
+  }
+  .sidebar-logo span { color: var(--gold); }
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav li a {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.9rem 1.5rem; font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--stone); text-decoration: none;
+    transition: all 0.3s; border-left: 2px solid transparent;
+  }
+  .sidebar-nav li a:hover, .sidebar-nav li a.active {
+    color: var(--gold); border-left-color: var(--gold);
+    background: rgba(201,169,110,0.05);
+  }
+  .sidebar-nav li a .nav-icon { font-size: 1rem; }
+  .dashboard-main { padding: 3rem; }
+  .dashboard-greeting { margin-bottom: 3rem; }
+  .dashboard-greeting h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--cream); }
+  .dashboard-greeting p { font-size: 0.7rem; color: var(--stone); margin-top: 0.5rem; }
+  .bookings-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+    gap: 1.5rem; margin-bottom: 3rem;
+  }
+  .booking-card {
+    border: 1px solid var(--glass-border); padding: 1.8rem;
+    background: var(--glass); position: relative;
+  }
+  .booking-status {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+  }
+  .status-pending { background: rgba(201,169,110,0.15); color: var(--gold); }
+  .status-confirmed { background: rgba(76,175,80,0.15); color: #81c784; }
+  .status-completed { background: rgba(100,100,100,0.15); color: var(--stone); }
+  .booking-type { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .booking-date { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--cream); margin-bottom: 0.5rem; }
+  .booking-location { font-size: 0.65rem; color: var(--stone); margin-bottom: 1.5rem; }
+  .booking-delivery { display: flex; align-items: center; gap: 0.5rem; font-size: 0.6rem; color: var(--light-stone); }
+  .delivery-icon { color: var(--gold); }
+  .dashboard-section-title {
+    font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--stone); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .dashboard-section-title::after { content: ''; flex: 1; height: 1px; background: var(--glass-border); }
+  .gallery-delivery { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+  .gallery-thumb { aspect-ratio: 1; overflow: hidden; }
+  .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .gallery-thumb:hover img { transform: scale(1.08); }
+
+  /* ===== ADMIN DASHBOARD ===== */
+  .admin-stats {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; margin-bottom: 3rem;
+  }
+  .admin-stat-card {
+    border: 1px solid var(--glass-border); padding: 1.5rem;
+    background: var(--glass);
+  }
+  .admin-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--gold); }
+  .admin-stat-label { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); margin-top: 0.3rem; }
+  .admin-stat-change { font-size: 0.6rem; color: #81c784; margin-top: 0.5rem; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    padding: 1rem 1.2rem; font-size: 0.55rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold); text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .data-table td {
+    padding: 1rem 1.2rem; font-size: 0.65rem; color: var(--light-stone);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .data-table tr:hover td { background: var(--glass); }
+  .table-action {
+    padding: 0.3rem 0.8rem; font-size: 0.5rem; letter-spacing: 0.1em;
+    text-transform: uppercase; border: 1px solid; cursor: none;
+    transition: all 0.2s; background: none;
+  }
+  .action-confirm { border-color: #81c784; color: #81c784; }
+  .action-confirm:hover { background: rgba(76,175,80,0.15); }
+  .action-view { border-color: var(--gold); color: var(--gold); }
+  .action-view:hover { background: rgba(201,169,110,0.15); }
+  .action-delete { border-color: #e57373; color: #e57373; }
+  .action-delete:hover { background: rgba(229,115,115,0.15); }
+  .tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--glass-border); margin-bottom: 2rem; }
+  .tab-btn {
+    padding: 0.9rem 1.8rem; font-size: 0.6rem; letter-spacing: 0.15em;
+    text-transform: uppercase; background: none; border: none;
+    color: var(--stone); cursor: none; transition: all 0.3s;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ===== LOGIN PAGE ===== */
+  .auth-page {
+    min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+    background: var(--warm-black);
+  }
+  .auth-visual {
+    background: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80') center/cover;
+    position: relative; display: flex; align-items: flex-end; padding: 4rem;
+  }
+  .auth-visual::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(13,11,9,0.9) 0%, rgba(13,11,9,0.3) 100%);
+  }
+  .auth-visual-content { position: relative; }
+  .auth-visual-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-style: italic; color: var(--cream);
+    line-height: 1.4; max-width: 400px;
+  }
+  .auth-form-wrap {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 4rem; background: var(--charcoal);
+  }
+  .auth-form-inner { width: 100%; max-width: 380px; }
+  .auth-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; letter-spacing: 0.3em; text-align: center;
+    color: var(--cream); margin-bottom: 3rem; text-transform: uppercase;
+  }
+  .auth-logo span { color: var(--gold); }
+  .auth-tabs { display: flex; gap: 0; margin-bottom: 2.5rem; border-bottom: 1px solid var(--glass-border); }
+  .auth-tab {
+    flex: 1; text-align: center; padding: 0.8rem;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone); cursor: none; transition: all 0.3s;
+    border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .auth-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .auth-divider { text-align: center; margin: 1.5rem 0; color: var(--stone); font-size: 0.6rem; letter-spacing: 0.1em; position: relative; }
+  .auth-divider::before, .auth-divider::after {
+    content: ''; position: absolute; top: 50%; width: calc(50% - 20px);
+    height: 1px; background: var(--glass-border);
+  }
+  .auth-divider::before { left: 0; } .auth-divider::after { right: 0; }
+  .auth-social { display: flex; gap: 1rem; }
+  .auth-social-btn {
+    flex: 1; padding: 0.9rem; border: 1px solid var(--glass-border);
+    background: none; color: var(--stone); font-size: 0.65rem;
+    cursor: none; transition: all 0.3s;
+  }
+  .auth-social-btn:hover { border-color: var(--gold); color: var(--cream); }
+  .auth-forgot { text-align: right; margin-top: -0.8rem; margin-bottom: 1.5rem; }
+  .auth-forgot a { font-size: 0.6rem; color: var(--stone); text-decoration: none; transition: color 0.3s; }
+  .auth-forgot a:hover { color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    background: #080604; padding: 5rem 4rem 2rem;
+    border-top: 1px solid var(--glass-border);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
+    margin-bottom: 4rem;
+  }
+  .footer-brand p { font-size: 0.65rem; color: var(--stone); line-height: 1.9; margin-top: 1rem; max-width: 280px; }
+  .footer-col h4 { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.8rem; }
+  .footer-col ul li a { font-size: 0.65rem; color: var(--stone); text-decoration: none; transition: color 0.3s; }
+  .footer-col ul li a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 2rem; border-top: 1px solid var(--glass-border);
+    font-size: 0.55rem; color: var(--muted); letter-spacing: 0.1em;
+  }
+
+  /* FLOATING NAV INDICATOR */
+  .page-indicator {
+    position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 8px; z-index: 100;
+  }
+  .pi-dot {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--stone);
+    transition: all 0.3s; cursor: none;
+  }
+  .pi-dot.active { background: var(--gold); height: 20px; border-radius: 2px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 1.5rem 2rem; }
+    nav.scrolled { padding: 1rem 2rem; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 5rem 2rem; }
+    .portfolio-grid { grid-template-columns: 1fr 1fr; }
+    .portfolio-item:nth-child(4) { grid-column: span 1; aspect-ratio: 4/3; }
+    .services-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; gap: 1px; }
+    .about-story { grid-template-columns: 1fr; gap: 3rem; }
+    .reviews-grid { grid-template-columns: 1fr 1fr; }
+    .contact-layout { grid-template-columns: 1fr; }
+    .dashboard-layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .auth-page { grid-template-columns: 1fr; }
+    .auth-visual { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .admin-stats { grid-template-columns: repeat(2,1fr); }
+    .booking-layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .hero-title { font-size: 3.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .admin-stats { grid-template-columns: 1fr 1fr; }
+    .about-stats { grid-template-columns: 1fr; }
+  }
+
+  /* MOBILE NAV DRAWER */
+  .mobile-nav {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 280px;
+    background: var(--charcoal); z-index: 2000;
+    transform: translateX(100%); transition: transform 0.4s cubic-bezier(.77,0,.18,1);
+    padding: 2rem; border-left: 1px solid var(--glass-border);
+  }
+  .mobile-nav.open { transform: translateX(0); }
+  .mobile-nav-links { list-style: none; margin-top: 4rem; }
+  .mobile-nav-links li { padding: 1rem 0; border-bottom: 1px solid var(--glass-border); }
+  .mobile-nav-links a { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream); text-decoration: none; }
+  .mobile-nav-close { background: none; border: none; color: var(--gold); font-size: 1.5rem; cursor: none; }
+  .mobile-nav-header { display: flex; justify-content: space-between; align-items: center; }
+
+  /* UTILITY */
+  .text-center { text-align: center; }
+  .mt-2 { margin-top: 2rem; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .gold { color: var(--gold); }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo" onclick="showPage('home')">LUM<span>I</span>ÈRE</a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')">Home</a></li>
+    <li><a href="#" onclick="showPage('gallery')">Gallery</a></li>
+    <li><a href="#" onclick="showPage('services')">Services</a></li>
+    <li><a href="#" onclick="showPage('about')">About</a></li>
+    <li><a href="#" onclick="showPage('reviews')">Reviews</a></li>
+    <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="showPage('booking')">Book a Session</a>
+  <div class="hamburger" onclick="toggleMobileNav()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-header">
+    <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--cream)">LUMIÈRE</span>
+    <button class="mobile-nav-close" onclick="toggleMobileNav()">✕</button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="#" onclick="showPage('home');toggleMobileNav()">Home</a></li>
+    <li><a href="#" onclick="showPage('gallery');toggleMobileNav()">Gallery</a></li>
+    <li><a href="#" onclick="showPage('services');toggleMobileNav()">Services</a></li>
+    <li><a href="#" onclick="showPage('booking');toggleMobileNav()">Book a Session</a></li>
+    <li><a href="#" onclick="showPage('about');toggleMobileNav()">About</a></li>
+    <li><a href="#" onclick="showPage('reviews');toggleMobileNav()">Reviews</a></li>
+    <li><a href="#" onclick="showPage('contact');toggleMobileNav()">Contact</a></li>
+    <li><a href="#" onclick="showPage('client');toggleMobileNav()">My Dashboard</a></li>
+    <li><a href="#" onclick="showPage('login');toggleMobileNav()">Login / Register</a></li>
+  </ul>
+</div>
+
+<!-- IMAGE MODAL -->
+<div class="modal" id="img-modal">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <button class="modal-nav modal-prev" onclick="modalNav(-1)">&#8592;</button>
+  <img class="modal-img" id="modal-img-el" src="" alt="">
+  <button class="modal-nav modal-next" onclick="modalNav(1)">&#8594;</button>
+</div>
+
+<!-- ========================= HOME PAGE ========================= -->
+<div class="page active" id="page-home">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">✦ Fine Art Photography Studio ✦</p>
+      <h1 class="hero-title">Capturing<br><em>Timeless</em><br>Moments</h1>
+      <p class="hero-sub">Where light meets emotion. Every frame tells a story that lasts forever.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-primary" onclick="showPage('booking')">Book a Session</a>
+        <a href="#" class="btn-outline" onclick="showPage('gallery')">View Portfolio</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Portfolio Preview -->
+  <section class="portfolio-section">
+    <div class="portfolio-header">
+      <p class="section-label" style="justify-content:center">Our Work</p>
+      <h2 class="section-title">Selected <em>Portfolio</em></h2>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-item" onclick="openModal('https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80',0)">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Wedding">
+        <div class="portfolio-overlay"><span class="portfolio-caption">Wedding — Clara & James</span></div>
+      </div>
+      <div class="portfolio-item" onclick="openModal('https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=1200&q=80',1)">
+        <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&q=80" alt="Portrait">
+        <div class="portfolio-overlay"><span class="portfolio-caption">Portrait — Sophia M.</span></div>
+      </div>
+      <div class="portfolio-item" onclick="openModal('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80',2)">
+        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80" alt="Event">
+        <div class="portfolio-overlay"><span class="portfolio-caption">Event — Gala 2024</span></div>
+      </div>
+      <div class="portfolio-item" onclick="openModal('https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1200&q=80',3)">
+        <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800&q=80" alt="Wedding">
+        <div class="portfolio-overlay"><span class="portfolio-caption">Wedding — Alexandra & David</span></div>
+      </div>
+      <div class="portfolio-item" onclick="openModal('https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=1200&q=80',4)">
+        <img src="https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=800&q=80" alt="Portrait">
+        <div class="portfolio-overlay"><span class="portfolio-caption">Portrait — Studio Series</span></div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1542596594-649edbc13630?w=800&q=80" alt="Event">
+        <div class="portfolio-overlay"><span class="portfolio-caption">Event — Corporate Summit</span></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem">
+      <a href="#" class="btn-outline" onclick="showPage('gallery')">View Full Gallery</a>
+    </div>
+  </section>
+
+  <!-- Services Preview -->
+  <section class="services-section">
+    <div style="text-align:center;margin-bottom:1rem">
+      <p class="section-label" style="justify-content:center">What We Offer</p>
+      <h2 class="section-title">Our <em>Services</em></h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">💒</div>
+        <h3 class="service-name">Wedding</h3>
+        <p class="service-desc">From intimate ceremonies to grand celebrations, we document every emotion with artistry and discretion. Full-day coverage to ensure no moment is missed.</p>
+        <a href="#" class="service-link" onclick="showPage('services')">Explore →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎭</div>
+        <h3 class="service-name">Portrait</h3>
+        <p class="service-desc">Revealing the authentic essence of every individual. Studio and outdoor sessions crafted to produce images you'll cherish for a lifetime.</p>
+        <a href="#" class="service-link" onclick="showPage('services')">Explore →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">✨</div>
+        <h3 class="service-name">Events</h3>
+        <p class="service-desc">Corporate gatherings, galas, launches, and celebrations. Professional coverage that captures the energy and atmosphere of your special occasion.</p>
+        <a href="#" class="service-link" onclick="showPage('services')">Explore →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <p class="section-label" style="justify-content:center">Client Love</p>
+    <h2 class="section-title">What They <em>Say</em></h2>
+    <div class="testimonials-wrapper">
+      <div class="testimonial-slide active">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Lumière didn't just photograph our wedding — they preserved our love story in the most breathtaking way. Every image is a masterpiece."</p>
+        <div class="testimonial-author">— Isabella & Marco Rossi · Wedding 2024</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"The portrait session was transformative. I've never felt so comfortable in front of a camera, and the results left me speechless."</p>
+        <div class="testimonial-author">— Sophia Chen · Portrait Session</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Our corporate gala photography exceeded every expectation. The team was professional, unobtrusive, and delivered extraordinary imagery."</p>
+        <div class="testimonial-author">— James Whitfield · The Grand Summit 2024</div>
+      </div>
+      <div class="testimonial-dots">
+        <div class="dot active" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="process-section">
+    <div style="text-align:center;margin-bottom:1rem">
+      <p class="section-label" style="justify-content:center">How It Works</p>
+      <h2 class="section-title">Our <em>Process</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-title">Book</div>
+        <div class="step-desc">Choose your session type and select a date that works for you through our simple booking system.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-title">Consult</div>
+        <div class="step-desc">We meet to discuss your vision, style preferences, and all the details that make your session unique.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-title">Shoot</div>
+        <div class="step-desc">Experience a relaxed, guided session where we capture authentic moments and stunning compositions.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-title">Delivery</div>
+        <div class="step-desc">Receive your beautifully edited gallery within 2–4 weeks, delivered via your private online portal.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">LUM<span style="color:var(--gold)">I</span>ÈRE</div>
+        <p>Fine art photography studio capturing life's most precious moments with elegance, artistry, and heartfelt dedication.</p>
+        <div class="social-links" style="margin-top:1.5rem">
+          <a class="social-link" href="#">IG</a>
+          <a class="social-link" href="#">FB</a>
+          <a class="social-link" href="#">PI</a>
+          <a class="social-link" href="#">TW</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('services')">Wedding Photography</a></li>
+          <li><a href="#" onclick="showPage('services')">Portrait Sessions</a></li>
+          <li><a href="#" onclick="showPage('services')">Event Coverage</a></li>
+          <li><a href="#" onclick="showPage('services')">Custom Packages</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('about')">Our Story</a></li>
+          <li><a href="#" onclick="showPage('gallery')">Portfolio</a></li>
+          <li><a href="#" onclick="showPage('reviews')">Client Reviews</a></li>
+          <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('booking')">Book a Session</a></li>
+          <li><a href="#" onclick="showPage('client')">Client Dashboard</a></li>
+          <li><a href="#" onclick="showPage('admin')">Admin Portal</a></li>
+          <li><a href="#" onclick="showPage('login')">Login / Register</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Lumière Photography Studio. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Service</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ========================= GALLERY PAGE ========================= -->
+<div class="page" id="page-gallery">
+  <div class="gallery-hero">
+    <div class="gallery-hero-content">
+      <p class="section-label">Our Portfolio</p>
+      <h1 class="gallery-hero h1" style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,6rem);font-weight:300;color:var(--white);line-height:1">The <em style="font-style:italic;color:var(--gold-light)">Gallery</em></h1>
+    </div>
+  </div>
+  <div class="gallery-filters">
+    <button class="filter-btn active" onclick="filterGallery('all', this)">All Work</button>
+    <button class="filter-btn" onclick="filterGallery('wedding', this)">Weddings</button>
+    <button class="filter-btn" onclick="filterGallery('portrait', this)">Portraits</button>
+    <button class="filter-btn" onclick="filterGallery('event', this)">Events</button>
+  </div>
+  <div class="masonry-grid" id="masonry-grid">
+    <div class="masonry-item" data-cat="wedding" onclick="openModal('https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80',0)">
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="Wedding">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openModal('https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=1200&q=80',1)">
+      <img src="https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=600&q=80" alt="Portrait">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="event" onclick="openModal('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80',2)">
+      <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80" alt="Event">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="wedding" onclick="openModal('https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1200&q=80',3)">
+      <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80" alt="Wedding">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openModal('https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=1200&q=80',4)">
+      <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&q=80" alt="Portrait">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="event" onclick="openModal('https://images.unsplash.com/photo-1542596594-649edbc13630?w=1200&q=80',5)">
+      <img src="https://images.unsplash.com/photo-1542596594-649edbc13630?w=600&q=80" alt="Event">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="wedding" onclick="openModal('https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1200&q=80',6)">
+      <img src="https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=600&q=80" alt="Wedding">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openModal('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&q=80',7)">
+      <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80" alt="Portrait">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+    <div class="masonry-item" data-cat="event" onclick="openModal('https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=1200&q=80',8)">
+      <img src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=600&q=80" alt="Event">
+      <div class="masonry-overlay"><div class="masonry-expand">⊕</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= SERVICES PAGE ========================= -->
+<div class="page" id="page-services">
+  <div class="services-hero">
+    <div>
+      <p class="section-label">What We Offer</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,6rem);font-weight:300;color:var(--white);line-height:1">Our <em style="font-style:italic;color:var(--gold-light)">Services</em></h1>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <section class="pricing-section">
+    <div style="text-align:center">
+      <p class="section-label" style="justify-content:center">Investment</p>
+      <h2 class="section-title">Choose Your <em>Package</em></h2>
+      <p style="font-size:0.7rem;color:var(--stone);max-width:500px;margin:0 auto">Every package is crafted to deliver an exceptional experience and imagery you'll treasure forever.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Basic</div>
+        <div class="pricing-price"><sup>$</sup>1,200</div>
+        <div class="pricing-sub">Perfect for intimate occasions</div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>4-hour session coverage</li>
+          <li>1 Photographer</li>
+          <li>200+ edited images</li>
+          <li>Private online gallery</li>
+          <li>14-day delivery</li>
+          <li class="unavailable">Second shooter</li>
+          <li class="unavailable">Engagement session</li>
+          <li class="unavailable">Photo album</li>
+        </ul>
+        <button class="pricing-btn" onclick="showPage('booking')">Book This Package</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-tier">Premium</div>
+        <div class="pricing-price"><sup>$</sup>2,800</div>
+        <div class="pricing-sub">Our most popular choice</div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>8-hour session coverage</li>
+          <li>2 Photographers</li>
+          <li>500+ edited images</li>
+          <li>Private online gallery</li>
+          <li>10-day delivery</li>
+          <li>Second shooter included</li>
+          <li>Engagement session</li>
+          <li class="unavailable">Photo album</li>
+        </ul>
+        <button class="pricing-btn" onclick="showPage('booking')">Book This Package</button>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-tier">Custom</div>
+        <div class="pricing-price" style="font-size:2.5rem">Tailored</div>
+        <div class="pricing-sub">Bespoke to your vision</div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>Flexible hours</li>
+          <li>Multiple photographers</li>
+          <li>Unlimited images</li>
+          <li>Private online gallery</li>
+          <li>Priority 7-day delivery</li>
+          <li>Second shooter included</li>
+          <li>Engagement session</li>
+          <li>Luxury photo album</li>
+        </ul>
+        <button class="pricing-btn" onclick="showPage('contact')">Get a Quote</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table -->
+  <section class="comparison-section">
+    <div style="text-align:center;margin-bottom:1rem">
+      <p class="section-label" style="justify-content:center">Compare</p>
+      <h2 class="section-title">Package <em>Comparison</em></h2>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Basic</th>
+          <th>Premium</th>
+          <th>Custom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Coverage Hours</td><td>4 hrs</td><td>8 hrs</td><td>Unlimited</td></tr>
+        <tr><td>Photographers</td><td>1</td><td>2</td><td>3+</td></tr>
+        <tr><td>Edited Images</td><td>200+</td><td>500+</td><td>Unlimited</td></tr>
+        <tr><td>Online Gallery</td><td class="check">✦</td><td class="check">✦</td><td class="check">✦</td></tr>
+        <tr><td>Second Shooter</td><td class="cross">—</td><td class="check">✦</td><td class="check">✦</td></tr>
+        <tr><td>Engagement Session</td><td class="cross">—</td><td class="check">✦</td><td class="check">✦</td></tr>
+        <tr><td>Photo Album</td><td class="cross">—</td><td class="cross">—</td><td class="check">✦</td></tr>
+        <tr><td>Print Release</td><td class="check">✦</td><td class="check">✦</td><td class="check">✦</td></tr>
+        <tr><td>Rush Delivery</td><td class="cross">—</td><td class="cross">—</td><td class="check">✦</td></tr>
+        <tr><td>Delivery Time</td><td>14 days</td><td>10 days</td><td>7 days</td></tr>
+      </tbody>
+    </table>
+    <div style="text-align:center;margin-top:3rem">
+      <a href="#" class="btn-primary" onclick="showPage('booking')">Book Your Session Today</a>
+    </div>
+  </section>
+</div>
+
+<!-- ========================= BOOKING PAGE ========================= -->
+<div class="page" id="page-booking">
+  <div class="booking-hero">
+    <div>
+      <p class="section-label">Reserve Your Date</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,6rem);font-weight:300;color:var(--white);line-height:1">Book a <em style="font-style:italic;color:var(--gold-light)">Session</em></h1>
+    </div>
+  </div>
+
+  <div id="booking-confirmation" class="confirmation-msg">
+    <div class="confirmation-icon">✦</div>
+    <h3>Booking Request Received</h3>
+    <p>Thank you for choosing Lumière. We've received your booking request and will confirm your session within 24 hours. A confirmation email has been sent to your address.</p>
+    <div style="margin-top:2rem">
+      <a href="#" class="btn-primary" onclick="showPage('client')">View My Dashboard</a>
+    </div>
+  </div>
+
+  <div class="booking-layout" id="booking-form-area">
+    <div>
+      <p class="section-label">Your Details</p>
+      <h2 class="section-title" style="font-size:2.5rem">Session <em>Information</em></h2>
+      <div style="height:1px;background:var(--glass-border);margin:2rem 0"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input class="form-input" type="text" placeholder="Your full name" id="book-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input class="form-input" type="email" placeholder="your@email.com" id="book-email">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input class="form-input" type="tel" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Shoot Type *</label>
+          <select class="form-select">
+            <option value="">Select type...</option>
+            <option>Wedding Photography</option>
+            <option>Portrait Session</option>
+            <option>Event Coverage</option>
+            <option>Engagement Session</option>
+            <option>Corporate Headshots</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Preferred Date *</label>
+          <input class="form-input" type="date" id="book-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Package</label>
+          <select class="form-select">
+            <option value="">Select package...</option>
+            <option>Basic — $1,200</option>
+            <option>Premium — $2,800</option>
+            <option>Custom — Contact us</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location / Venue</label>
+        <input class="form-input" type="text" placeholder="City, venue, or address">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Additional Notes</label>
+        <textarea class="form-textarea" placeholder="Tell us about your vision, special requests, or any details we should know..."></textarea>
+      </div>
+      <button class="form-submit" onclick="submitBooking()">Send Booking Request ✦</button>
+    </div>
+
+    <!-- Calendar -->
+    <div>
+      <p class="section-label">Availability</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--cream);margin-bottom:1.5rem">Check <em>Dates</em></h3>
+      <div class="calendar-widget">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="calNav(-1)">‹</button>
+          <span class="cal-month" id="cal-month-label">April 2025</span>
+          <button class="cal-nav" onclick="calNav(1)">›</button>
+        </div>
+        <div class="cal-days-header">
+          <span class="cal-day-label">Su</span><span class="cal-day-label">Mo</span>
+          <span class="cal-day-label">Tu</span><span class="cal-day-label">We</span>
+          <span class="cal-day-label">Th</span><span class="cal-day-label">Fr</span>
+          <span class="cal-day-label">Sa</span>
+        </div>
+        <div class="cal-days" id="cal-days"></div>
+        <div class="cal-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Selected</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--stone);opacity:0.3"></div>Booked</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--cream)"></div>Available</div>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;border:1px solid var(--glass-border);padding:1.5rem;background:var(--glass)">
+        <p style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Studio Info</p>
+        <p style="font-size:0.65rem;color:var(--stone);line-height:1.8">📍 42 Lumière Lane, Arts District<br>📞 +1 (555) 927-4831<br>✉️ hello@lumierestudio.com<br>⏰ Mon–Sat · 9am – 7pm</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= ABOUT PAGE ========================= -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <div class="about-hero-content">
+      <p class="section-label">Our Story</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,5rem);font-weight:300;color:var(--white);line-height:1.1">Behind<br><em style="font-style:italic;color:var(--gold-light)">the Lens</em></h1>
+      <p style="font-size:0.7rem;color:var(--light-stone);margin-top:1.5rem;max-width:400px;line-height:1.8">A decade of capturing life's most extraordinary moments with artistry, passion, and purpose.</p>
+    </div>
+  </div>
+
+  <div class="about-story">
+    <div class="about-story-img">
+      <img src="https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=800&q=80" alt="Photographer">
+    </div>
+    <div class="about-text">
+      <p class="section-label">My Journey</p>
+      <h2 class="section-title" style="font-size:2.8rem">Eleanor <em>Voss</em></h2>
+      <p class="about-text p">Photography found me long before I found it. Growing up in the sun-drenched hills of Tuscany, I was captivated by the way light transformed ordinary scenes into something transcendent.</p>
+      <p class="about-text p">After studying Fine Arts at the École des Beaux-Arts in Paris and apprenticing with legendary portrait photographer Henri Moreau, I returned home with a singular vision: to create imagery that endures.</p>
+      <p class="about-text p">Over 10 years and 800+ sessions later, Lumière Studio has grown into a boutique atelier dedicated to the art of authentic storytelling. Every image we produce is a collaboration between light, emotion, and the irreplaceable human spirit.</p>
+      <p class="about-text p" style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--cream);">"I don't take photographs. I receive them — from the light, from you, from the moment itself."</p>
+      <div style="margin-top:2.5rem">
+        <a href="#" class="btn-primary" onclick="showPage('booking')">Book with Eleanor</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="about-stats" style="padding:0 4rem">
+    <div class="stat-item">
+      <div class="stat-num">800+</div>
+      <div class="stat-label">Sessions Completed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">10</div>
+      <div class="stat-label">Years of Experience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Client Satisfaction</div>
+    </div>
+  </div>
+
+  <section style="background:var(--charcoal);padding:6rem 4rem;text-align:center">
+    <p class="section-label" style="justify-content:center">Awards & Recognition</p>
+    <h2 class="section-title">Celebrated <em>Excellence</em></h2>
+    <div style="display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;margin-top:3rem">
+      <div style="text-align:center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🏆</div>
+        <div style="font-size:0.65rem;letter-spacing:0.1em;color:var(--cream)">Wedding Photographer of the Year</div>
+        <div style="font-size:0.55rem;color:var(--stone);margin-top:0.3rem">International Photography Awards 2023</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">✦</div>
+        <div style="font-size:0.65rem;letter-spacing:0.1em;color:var(--cream)">Top 50 Luxury Studios</div>
+        <div style="font-size:0.55rem;color:var(--stone);margin-top:0.3rem">Vogue Wedding Directory 2024</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:2rem;margin-bottom:0.5rem">🎖️</div>
+        <div style="font-size:0.65rem;letter-spacing:0.1em;color:var(--cream)">Excellence in Portrait Art</div>
+        <div style="font-size:0.55rem;color:var(--stone);margin-top:0.3rem">Fine Art Photography Collective 2022</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ========================= REVIEWS PAGE ========================= -->
+<div class="page" id="page-reviews">
+  <div class="reviews-hero">
+    <div>
+      <p class="section-label">Client Testimonials</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,6rem);font-weight:300;color:var(--white);line-height:1">Client <em style="font-style:italic;color:var(--gold-light)">Love</em></h1>
+    </div>
+  </div>
+
+  <section style="background:var(--charcoal);padding:6rem 4rem">
+    <div style="text-align:center;margin-bottom:1rem">
+      <p class="section-label" style="justify-content:center">Testimonials</p>
+      <h2 class="section-title">What Our <em>Clients Say</em></h2>
+      <div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1rem">
+        <div style="font-size:2rem;font-family:'Cormorant Garamond',serif;color:var(--cream)">4.9</div>
+        <div>
+          <div style="color:var(--gold);letter-spacing:3px">★★★★★</div>
+          <div style="font-size:0.55rem;color:var(--stone);letter-spacing:0.1em">Based on 142 reviews</div>
+        </div>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Working with Eleanor was like having a friend capture our most cherished moments. She has an extraordinary gift for finding the emotion in every scene."</p>
+        <div class="review-author-wrap">
+          <img class="review-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="">
+          <div><div class="review-author-name">Isabella Rossi</div><div class="review-author-type">Wedding — July 2024</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"My portrait session was transformative. Eleanor made me feel completely at ease and the results are simply stunning. I couldn't be happier."</p>
+        <div class="review-author-wrap">
+          <img class="review-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="">
+          <div><div class="review-author-name">Marcus Chen</div><div class="review-author-type">Portrait Session — March 2024</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The gallery delivered for our corporate event was exceptional. Every important moment was captured with such artistry and professionalism."</p>
+        <div class="review-author-wrap">
+          <img class="review-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" alt="">
+          <div><div class="review-author-name">Sophia Williams</div><div class="review-author-type">Event — November 2024</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"From the initial consultation to receiving our wedding gallery, every interaction was flawless. Lumière exceeded every expectation we had."</p>
+        <div class="review-author-wrap">
+          <img class="review-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="">
+          <div><div class="review-author-name">David Park</div><div class="review-author-type">Wedding — September 2024</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Eleanor has a rare talent for storytelling through imagery. Our anniversary session produced images that feel like fine art. We'll treasure them always."</p>
+        <div class="review-author-wrap">
+          <img class="review-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="">
+          <div><div class="review-author-name">Amara Osei</div><div class="review-author-type">Portrait Session — May 2024</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"I've hired many photographers over the years, but Lumière is in a class of its own. The attention to detail, the light, the composition — all extraordinary."</p>
+        <div class="review-author-wrap">
+          <img class="review-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80" alt="">
+          <div><div class="review-author-name">James Thornton</div><div class="review-author-type">Event — February 2024</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Before/After -->
+  <section class="before-after-section">
+    <p class="section-label" style="justify-content:center">Our Editing Process</p>
+    <h2 class="section-title">Before & <em>After</em></h2>
+    <p style="font-size:0.7rem;color:var(--stone);margin-top:0.5rem">Drag to compare our signature editing process</p>
+    <div class="ba-container" id="ba-container">
+      <img class="ba-after" src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="After">
+      <div class="ba-before-wrap" id="ba-before-wrap">
+        <img class="ba-before" src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80&sat=-100&bri=-20" alt="Before" style="filter:saturate(0.2) brightness(1.2) contrast(0.85)">
+      </div>
+      <div class="ba-slider" id="ba-slider">
+        <div class="ba-handle">↔</div>
+      </div>
+    </div>
+    <div class="ba-labels" style="max-width:800px;margin:0.5rem auto 0">
+      <span>Before</span>
+      <span>After</span>
+    </div>
+  </section>
+</div>
+
+<!-- ========================= CONTACT PAGE ========================= -->
+<div class="page" id="page-contact">
+  <div class="contact-hero">
+    <div>
+      <p class="section-label">Get in Touch</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,6rem);font-weight:300;color:var(--white);line-height:1">Let's <em style="font-style:italic;color:var(--gold-light)">Connect</em></h1>
+    </div>
+  </div>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <p class="section-label">Studio Details</p>
+      <h2 class="section-title" style="font-size:2.5rem">Find <em>Us</em></h2>
+      <div style="height:1px;background:var(--glass-border);margin:2rem 0"></div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📍</div>
+        <div>
+          <div class="contact-detail-label">Studio Address</div>
+          <div class="contact-detail-val">42 Lumière Lane, Arts District<br>New York, NY 10001</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📞</div>
+        <div>
+          <div class="contact-detail-label">Phone</div>
+          <div class="contact-detail-val">+1 (555) 927-4831</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">✉️</div>
+        <div>
+          <div class="contact-detail-label">Email</div>
+          <div class="contact-detail-val">hello@lumierestudio.com</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">⏰</div>
+        <div>
+          <div class="contact-detail-label">Studio Hours</div>
+          <div class="contact-detail-val">Monday – Saturday: 9am – 7pm<br>Sunday: By appointment only</div>
+        </div>
+      </div>
+      <div class="social-links">
+        <a class="social-link" href="#" title="Instagram">IG</a>
+        <a class="social-link" href="#" title="Facebook">FB</a>
+        <a class="social-link" href="#" title="Pinterest">PI</a>
+        <a class="social-link" href="#" title="Twitter">TW</a>
+        <a class="social-link" href="#" title="YouTube">YT</a>
+      </div>
+      <div class="map-embed">
+        <div class="map-placeholder">
+          <div class="map-placeholder-icon">🗺️</div>
+          <p>42 Lumière Lane · Arts District · New York</p>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form-wrap">
+      <p class="section-label">Send a Message</p>
+      <h2 class="section-title" style="font-size:2.5rem">Write <em>to Us</em></h2>
+      <div style="height:1px;background:var(--glass-border);margin:2rem 0"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" type="text" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input class="form-input" type="text" placeholder="How can we help?">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" style="min-height:160px" placeholder="Tell us about your project, ask us anything..."></textarea>
+      </div>
+      <button class="form-submit">Send Message ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= CLIENT DASHBOARD ========================= -->
+<div class="page" id="page-client">
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">LUM<span>I</span>ÈRE</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="active"><span class="nav-icon">📊</span> Dashboard</a></li>
+        <li><a href="#"><span class="nav-icon">📅</span> My Bookings</a></li>
+        <li><a href="#"><span class="nav-icon">🖼️</span> My Gallery</a></li>
+        <li><a href="#"><span class="nav-icon">💬</span> Messages</a></li>
+        <li><a href="#"><span class="nav-icon">🧾</span> Invoices</a></li>
+        <li><a href="#"><span class="nav-icon">⚙️</span> Settings</a></li>
+        <li><a href="#" onclick="showPage('home')"><span class="nav-icon">🚪</span> Back to Site</a></li>
+      </ul>
+    </aside>
+    <main class="dashboard-main">
+      <div class="dashboard-greeting">
+        <p class="section-label" style="margin-bottom:0.5rem">Welcome Back</p>
+        <h2 class="dashboard-greeting h2" style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--cream)">Good morning, <em style="font-style:italic;color:var(--gold)">Isabella</em></h2>
+        <p style="font-size:0.65rem;color:var(--stone);margin-top:0.5rem">Here's an overview of your sessions and deliveries.</p>
+      </div>
+
+      <p class="dashboard-section-title">Active Bookings</p>
+      <div class="bookings-grid">
+        <div class="booking-card">
+          <span class="booking-status status-confirmed">Confirmed</span>
+          <div class="booking-type">Wedding Photography</div>
+          <div class="booking-date">June 14, 2025</div>
+          <div class="booking-location">📍 Grand Ballroom, NYC</div>
+          <div class="booking-delivery"><span class="delivery-icon">📦</span> Gallery delivery: July 5, 2025</div>
+        </div>
+        <div class="booking-card">
+          <span class="booking-status status-pending">Pending</span>
+          <div class="booking-type">Engagement Session</div>
+          <div class="booking-date">May 22, 2025</div>
+          <div class="booking-location">📍 Central Park, NYC</div>
+          <div class="booking-delivery"><span class="delivery-icon">⏳</span> Awaiting confirmation</div>
+        </div>
+        <div class="booking-card">
+          <span class="booking-status status-completed">Completed</span>
+          <div class="booking-type">Portrait Session</div>
+          <div class="booking-date">March 10, 2025</div>
+          <div class="booking-location">📍 Lumière Studio</div>
+          <div class="booking-delivery"><span class="delivery-icon">✅</span> Gallery ready to download</div>
+        </div>
+      </div>
+
+      <p class="dashboard-section-title">Recent Deliveries</p>
+      <div class="gallery-delivery">
+        <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=80" alt=""></div>
+        <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=300&q=80" alt=""></div>
+        <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=300&q=80" alt=""></div>
+        <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=300&q=80" alt=""></div>
+      </div>
+      <div style="margin-top:1rem;text-align:right">
+        <a href="#" style="font-size:0.6rem;letter-spacing:0.15em;color:var(--gold);text-decoration:none">View Full Gallery →</a>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ========================= ADMIN DASHBOARD ========================= -->
+<div class="page" id="page-admin">
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">LUM<span>I</span>ÈRE <span style="font-size:0.7rem;color:var(--stone)">Admin</span></div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="active"><span class="nav-icon">📊</span> Overview</a></li>
+        <li><a href="#"><span class="nav-icon">📅</span> Bookings</a></li>
+        <li><a href="#"><span class="nav-icon">🖼️</span> Gallery</a></li>
+        <li><a href="#"><span class="nav-icon">📦</span> Packages</a></li>
+        <li><a href="#"><span class="nav-icon">⭐</span> Reviews</a></li>
+        <li><a href="#"><span class="nav-icon">👥</span> Clients</a></li>
+        <li><a href="#"><span class="nav-icon">💰</span> Revenue</a></li>
+        <li><a href="#" onclick="showPage('home')"><span class="nav-icon">🌐</span> View Site</a></li>
+      </ul>
+    </aside>
+    <main class="dashboard-main">
+      <div class="dashboard-greeting">
+        <p class="section-label" style="margin-bottom:0.5rem">Admin Portal</p>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--cream)">Studio <em style="font-style:italic;color:var(--gold)">Dashboard</em></h2>
+      </div>
+
+      <!-- Stats -->
+      <div class="admin-stats">
+        <div class="admin-stat-card">
+          <div class="admin-stat-num">28</div>
+          <div class="admin-stat-label">Total Bookings</div>
+          <div class="admin-stat-change">↑ 12% this month</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-num">$48k</div>
+          <div class="admin-stat-label">Monthly Revenue</div>
+          <div class="admin-stat-change">↑ 8% vs last month</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-num">6</div>
+          <div class="admin-stat-label">Pending Requests</div>
+          <div class="admin-stat-change" style="color:var(--gold)">Needs attention</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-num">4.9</div>
+          <div class="admin-stat-label">Average Rating</div>
+          <div class="admin-stat-change">142 reviews total</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('bookings-tab', this)">Bookings</button>
+        <button class="tab-btn" onclick="switchTab('packages-tab', this)">Packages</button>
+        <button class="tab-btn" onclick="switchTab('reviews-tab', this)">Reviews</button>
+        <button class="tab-btn" onclick="switchTab('gallery-tab', this)">Gallery Upload</button>
+      </div>
+
+      <div class="tab-content active" id="bookings-tab">
+        <p class="dashboard-section-title">Recent Bookings</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Client</th><th>Type</th><th>Date</th><th>Package</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Isabella Rossi</td><td>Wedding</td><td>June 14, 2025</td><td>Premium</td>
+              <td><span class="booking-status status-confirmed" style="position:static">Confirmed</span></td>
+              <td style="display:flex;gap:0.5rem">
+                <button class="table-action action-view">View</button>
+                <button class="table-action action-delete">Cancel</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Marcus Chen</td><td>Portrait</td><td>May 22, 2025</td><td>Basic</td>
+              <td><span class="booking-status status-pending" style="position:static">Pending</span></td>
+              <td style="display:flex;gap:0.5rem">
+                <button class="table-action action-confirm">Confirm</button>
+                <button class="table-action action-view">View</button>
+                <button class="table-action action-delete">Decline</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Sophia Williams</td><td>Event</td><td>May 30, 2025</td><td>Custom</td>
+              <td><span class="booking-status status-pending" style="position:static">Pending</span></td>
+              <td style="display:flex;gap:0.5rem">
+                <button class="table-action action-confirm">Confirm</button>
+                <button class="table-action action-view">View</button>
+                <button class="table-action action-delete">Decline</button>
+              </td>
+            </tr>
+            <tr>
+              <td>David Park</td><td>Wedding</td><td>July 5, 2025</td><td>Premium</td>
+              <td><span class="booking-status status-confirmed" style="position:static">Confirmed</span></td>
+              <td style="display:flex;gap:0.5rem">
+                <button class="table-action action-view">View</button>
+                <button class="table-action action-delete">Cancel</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-content" id="packages-tab">
+        <p class="dashboard-section-title">Manage Packages</p>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem">
+          <button class="btn-primary" style="padding:0.8rem 2rem;font-size:0.6rem;cursor:none">+ Add Package</button>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Package</th><th>Price</th><th>Hours</th><th>Images</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>Basic</td><td>$1,200</td><td>4 hrs</td><td>200+</td><td style="color:#81c784">Active</td><td style="display:flex;gap:0.5rem"><button class="table-action action-view">Edit</button><button class="table-action action-delete">Delete</button></td></tr>
+            <tr><td>Premium</td><td>$2,800</td><td>8 hrs</td><td>500+</td><td style="color:#81c784">Active</td><td style="display:flex;gap:0.5rem"><button class="table-action action-view">Edit</button><button class="table-action action-delete">Delete</button></td></tr>
+            <tr><td>Custom</td><td>Variable</td><td>Flexible</td><td>Unlimited</td><td style="color:#81c784">Active</td><td style="display:flex;gap:0.5rem"><button class="table-action action-view">Edit</button><button class="table-action action-delete">Delete</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-content" id="reviews-tab">
+        <p class="dashboard-section-title">Review Management</p>
+        <table class="data-table">
+          <thead><tr><th>Client</th><th>Rating</th><th>Review</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>Isabella Rossi</td><td style="color:var(--gold)">★★★★★</td><td style="max-width:280px;color:var(--stone)">"Eleanor is a true artist and professional..."</td><td>July 2024</td><td style="display:flex;gap:0.5rem"><button class="table-action action-confirm">Approve</button><button class="table-action action-delete">Hide</button></td></tr>
+            <tr><td>Marcus Chen</td><td style="color:var(--gold)">★★★★★</td><td style="max-width:280px;color:var(--stone)">"My portrait session was transformative..."</td><td>Mar 2024</td><td style="display:flex;gap:0.5rem"><button class="table-action action-confirm">Approve</button><button class="table-action action-delete">Hide</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-content" id="gallery-tab">
+        <p class="dashboard-section-title">Upload Gallery Images</p>
+        <div style="border:2px dashed var(--glass-border);padding:4rem;text-align:center;background:var(--glass);transition:border-color 0.3s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+          <div style="font-size:3rem;margin-bottom:1rem">📸</div>
+          <p style="font-size:0.75rem;color:var(--cream);margin-bottom:0.5rem">Drag & drop images here</p>
+          <p style="font-size:0.6rem;color:var(--stone);margin-bottom:1.5rem">JPG, PNG, WEBP up to 50MB each</p>
+          <button class="btn-primary" style="cursor:none;font-size:0.6rem;padding:0.8rem 2rem">Choose Files</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:2rem">
+          <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=200&q=80" alt=""></div>
+          <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=200&q=80" alt=""></div>
+          <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=200&q=80" alt=""></div>
+          <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=200&q=80" alt=""></div>
+          <div class="gallery-thumb"><img src="https://images.unsplash.com/photo-1542596594-649edbc13630?w=200&q=80" alt=""></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ========================= LOGIN PAGE ========================= -->
+<div class="page" id="page-login">
+  <div class="auth-page">
+    <div class="auth-visual">
+      <div class="auth-visual-content">
+        <p style="font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">✦ Lumière Studio</p>
+        <p class="auth-visual-quote">"Every great photograph begins with a great relationship."</p>
+        <p style="font-size:0.6rem;color:var(--stone);margin-top:1rem;letter-spacing:0.1em">— Eleanor Voss, Founder</p>
+      </div>
+    </div>
+    <div class="auth-form-wrap">
+      <div class="auth-form-inner">
+        <div class="auth-logo">LUM<span>I</span>ÈRE</div>
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchAuthTab('login-tab', this)">Sign In</button>
+          <button class="auth-tab" onclick="switchAuthTab('register-tab', this)">Create Account</button>
+        </div>
+
+        <div id="login-tab">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-input" type="password" placeholder="••••••••">
+          </div>
+          <div class="auth-forgot"><a href="#">Forgot password?</a></div>
+          <button class="form-submit" onclick="showPage('client')">Sign In ✦</button>
+          <div class="auth-divider">or continue with</div>
+          <div class="auth-social">
+            <button class="auth-social-btn">G Google</button>
+            <button class="auth-social-btn">f Facebook</button>
+          </div>
+          <p style="text-align:center;margin-top:2rem;font-size:0.6rem;color:var(--stone)">
+            Admin? <a href="#" onclick="showPage('admin')" style="color:var(--gold);text-decoration:none">Access Admin Portal</a>
+          </p>
+        </div>
+
+        <div id="register-tab" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input class="form-input" type="text" placeholder="First">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input class="form-input" type="text" placeholder="Last">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-input" type="password" placeholder="Create a strong password">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            <input class="form-input" type="password" placeholder="Repeat password">
+          </div>
+          <button class="form-submit" onclick="showPage('client')">Create Account ✦</button>
+          <p style="text-align:center;margin-top:1.5rem;font-size:0.6rem;color:var(--stone)">
+            By registering, you agree to our <a href="#" style="color:var(--gold);text-decoration:none">Terms of Service</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top = e.clientY + 'px';
+  }, 80);
+});
+
+// ===== NAV SCROLL =====
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ===== PAGE NAVIGATION =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) {
+    page.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  // Hide/show footer nav context
+  const showNav = !['client','admin','login'].includes(id);
+  document.getElementById('main-nav').style.display = showNav ? 'flex' : 'flex';
+}
+
+// ===== MOBILE NAV =====
+function toggleMobileNav() {
+  document.getElementById('mobile-nav').classList.toggle('open');
+}
+
+// ===== TESTIMONIALS =====
+let currentSlide = 0;
+function goToSlide(n) {
+  const slides = document.querySelectorAll('.testimonial-slide');
+  const dots = document.querySelectorAll('.dot');
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  currentSlide = n;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+}
+setInterval(() => goToSlide((currentSlide + 1) % 3), 5000);
+
+// ===== GALLERY FILTER =====
+function filterGallery(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.masonry-item').forEach(item => {
+    item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// ===== MODAL =====
+const modalImgs = [
+  'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80',
+  'https://images.unsplash.com/photo-1529636560338-22f71c29f869?w=1200&q=80',
+  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80',
+  'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1200&q=80',
+  'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=1200&q=80',
+  'https://images.unsplash.com/photo-1542596594-649edbc13630?w=1200&q=80',
+  'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1200&q=80',
+  'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&q=80',
+  'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=1200&q=80',
+];
+let currentModalIdx = 0;
+function openModal(src, idx) {
+  currentModalIdx = idx;
+  document.getElementById('modal-img-el').src = src;
+  document.getElementById('img-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('img-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function modalNav(dir) {
+  currentModalIdx = (currentModalIdx + dir + modalImgs.length) % modalImgs.length;
+  document.getElementById('modal-img-el').src = modalImgs[currentModalIdx];
+}
+document.getElementById('img-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowLeft') modalNav(-1);
+  if (e.key === 'ArrowRight') modalNav(1);
+});
+
+// ===== CALENDAR =====
+let calDate = new Date(2025, 3, 1); // April 2025
+const bookedDays = [5, 12, 19, 26, 8, 15];
+function renderCalendar() {
+  const year = calDate.getFullYear();
+  const month = calDate.getMonth();
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent = months[month] + ' ' + year;
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrev = new Date(year, month, 0).getDate();
+  const grid = document.getElementById('cal-days');
+  grid.innerHTML = '';
+  const today = new Date();
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const d = document.createElement('div');
+    d.className = 'cal-day other-month';
+    d.textContent = daysInPrev - i;
+    grid.appendChild(d);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el = document.createElement('div');
+    const isBooked = bookedDays.includes(d);
+    const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
+    el.className = 'cal-day ' + (isBooked ? 'booked' : 'available') + (isToday ? ' today' : '');
+    el.textContent = d;
+    if (!isBooked) el.onclick = () => selectDay(el, d);
+    grid.appendChild(el);
+  }
+  let remaining = 42 - (firstDay + daysInMonth);
+  for (let d = 1; d <= remaining; d++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day other-month';
+    el.textContent = d;
+    grid.appendChild(el);
+  }
+}
+function selectDay(el, d) {
+  document.querySelectorAll('.cal-day.selected').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function calNav(dir) {
+  calDate.setMonth(calDate.getMonth() + dir);
+  renderCalendar();
+}
+renderCalendar();
+
+// ===== BOOKING SUBMIT =====
+function submitBooking() {
+  const name = document.getElementById('book-name').value;
+  const email = document.getElementById('book-email').value;
+  if (!name || !email) { alert('Please fill in at least your name and email.'); return; }
+  document.getElementById('booking-form-area').style.display = 'none';
+  document.getElementById('booking-confirmation').classList.add('show');
+}
+
+// ===== TABS =====
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
+function switchAuthTab(tabId, btn) {
+  document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('login-tab').style.display = tabId === 'login-tab' ? 'block' : 'none';
+  document.getElementById('register-tab').style.display = tabId === 'register-tab' ? 'block' : 'none';
+}
+
+// ===== BEFORE/AFTER SLIDER =====
+const baContainer = document.getElementById('ba-container');
+const baSlider = document.getElementById('ba-slider');
+const baBeforeWrap = document.getElementById('ba-before-wrap');
+let isDragging = false;
+function setBA(e) {
+  if (!baContainer) return;
+  const rect = baContainer.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  const pct = Math.min(Math.max(x / rect.width * 100, 2), 98);
+  baBeforeWrap.style.width = pct + '%';
+  baSlider.style.left = pct + '%';
+}
+if (baSlider) {
+  baSlider.addEventListener('mousedown', () => isDragging = true);
+  document.addEventListener('mouseup', () => isDragging = false);
+  document.addEventListener('mousemove', e => { if (isDragging) setBA(e); });
+  baSlider.addEventListener('touchstart', () => isDragging = true);
+  document.addEventListener('touchend', () => isDragging = false);
+  document.addEventListener('touchmove', e => { if (isDragging) setBA(e); });
+}
+
+// ===== SMOOTH HOVER ON NAV =====
+document.querySelectorAll('a, button, .cal-day, .masonry-item, .portfolio-item').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    cursorRing.style.transform = 'translate(-50%,-50%) scale(1.4)';
+    cursorRing.style.opacity = '0.8';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursorRing.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursorRing.style.opacity = '0.5';
+  });
+});
+</script>
+</body>
+</html>

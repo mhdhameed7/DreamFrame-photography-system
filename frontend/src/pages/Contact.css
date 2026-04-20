@@ -1,0 +1,105 @@
+/* ── Contact Page ── */
+
+.contact-hero {
+  position: relative;
+  height: 50vh;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--cream);
+  min-height: 500px;
+}
+
+.contact-info {
+  padding: 5rem;
+  background: var(--cream);
+}
+
+.contact-divider {
+  width: 40px;
+  height: 2px;
+  background: var(--accent-light);
+  margin: 2rem 0;
+  border-radius: 2px;
+}
+
+.contact-detail {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.contact-detail-icon {
+  font-size: 1.2rem;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  border-radius: 6px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-detail-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.contact-detail-val {
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.contact-social-links {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 2.5rem;
+}
+
+.map-embed {
+  margin-top: 2rem;
+}
+
+.map-placeholder {
+  background: var(--white);
+  padding: 3rem 2rem;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.map-placeholder-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.map-placeholder p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.contact-form-wrap {
+  padding: 5rem;
+  background: var(--ivory);
+}
+
+@media (max-width: 1024px) {
+  .contact-layout { grid-template-columns: 1fr; }
+  .contact-info, .contact-form-wrap { padding: 3rem 2rem; }
+}

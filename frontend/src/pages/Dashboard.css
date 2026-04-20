@@ -1,0 +1,410 @@
+/* ── Premium Client Dashboard Layout ── */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+  background: var(--warm-bg);
+  background-image: radial-gradient(circle at top right, rgba(189, 166, 206, 0.1), transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(180, 211, 217, 0.1), transparent 50%);
+}
+
+.sidebar {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  padding: 3rem 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.4);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  padding: 0 2.5rem 3rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.25em;
+  color: var(--text-primary);
+}
+
+.sidebar-logo span { color: var(--accent); }
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1.5rem;
+  flex-grow: 1;
+}
+
+.sidebar-nav li a,
+.sidebar-nav li button {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 1.5rem;
+  font-family: inherit;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  font-weight: 500;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a.active,
+.sidebar-nav li button:hover,
+.sidebar-nav li button.active {
+  color: var(--accent);
+  background: var(--white);
+  box-shadow: 0 4px 15px rgba(155, 142, 199, 0.1);
+  transform: translateX(5px);
+}
+
+.sidebar-nav li a .nav-icon,
+.sidebar-nav li button .nav-icon { font-size: 1.1rem; opacity: 0.7; }
+
+.sidebar-nav li a.active .nav-icon,
+.sidebar-nav li button.active .nav-icon { opacity: 1; }
+
+.dashboard-main { 
+  padding: 4rem 5rem; 
+  max-width: 1200px;
+}
+
+.dashboard-greeting { margin-bottom: 4rem; }
+
+.dashboard-greeting h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-greeting h2 em { font-style: italic; color: var(--accent); }
+
+.dashboard-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* ── Luxurious Tracker Tabs ── */
+.tracker-tabs {
+  display: flex;
+  gap: 3rem;
+  border-bottom: 1px solid rgba(155, 142, 199, 0.15);
+  margin-bottom: 3rem;
+  overflow-x: auto;
+  padding-bottom: 1px;
+}
+
+.tracker-tab-btn {
+  background: none;
+  border: none;
+  padding: 1.2rem 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.tracker-tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: left;
+}
+
+.tracker-tab-btn:hover { color: var(--accent); }
+
+.tracker-tab-btn.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.tracker-tab-btn.active::after { transform: scaleX(1); }
+
+/* ── Tracking Cards (High-End SaaS Feel) ── */
+.tracking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.tracking-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 10px 40px rgba(155, 142, 199, 0.05), inset 0 0 0 1px rgba(255,255,255,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: radial-gradient(ellipse at top, rgba(189, 166, 206, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+.tracking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.tracking-type {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.tracking-date {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.tracking-meta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.tracking-id {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tracking-status-badge {
+  background: var(--white);
+  color: var(--accent);
+  padding: 0.6rem 1.2rem;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 15px rgba(155, 142, 199, 0.08);
+}
+
+/* ── Animated Progress Pipeline ── */
+.progress-pipeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 3.5rem;
+  padding: 0 2rem;
+}
+
+.pipeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  text-align: center;
+  z-index: 1;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--white);
+  margin-bottom: 1rem;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 2;
+  position: relative;
+}
+
+.step-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.pipeline-step.completed .step-circle {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 4px 15px rgba(155, 142, 199, 0.3);
+}
+
+.pipeline-step.completed .step-label { color: var(--text-primary); }
+
+.pipeline-step.current .step-circle {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 6px var(--glass);
+}
+
+.pipeline-step.current .step-label { color: var(--accent); }
+
+.step-line {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+
+.pipeline-step.completed .step-line {
+  background: var(--accent);
+}
+
+/* ── Refined Photos Section ── */
+.tracking-photos {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.photos-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.photo-thumb {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.photo-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+  border-radius: 8px;
+}
+
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.photo-thumb:hover img { transform: scale(1.05); }
+
+.no-photos-yet {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 1rem 0;
+}
+
+/* ── Footer Actions ── */
+.tracking-footer {
+  display: flex;
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(155, 142, 199, 0.15);
+}
+
+.tracking-btn {
+  padding: 0.8rem 2rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  background: var(--white);
+}
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 6rem 2rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed var(--accent-light);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-light);
+}
+
+.empty-state h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 0.8rem;
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .dashboard-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .dashboard-main { padding: 2rem; }
+  .progress-pipeline { padding: 0; }
+  .step-label { font-size: 0.5rem; }
+}

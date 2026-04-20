@@ -1,0 +1,141 @@
+/* ── About Page ── */
+
+.about-hero {
+  position: relative;
+  height: 50vh;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.about-hero-sub {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  margin-top: 1.2rem;
+  line-height: 1.7;
+}
+
+/* Story Section */
+.about-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 550px;
+  background: var(--cream);
+}
+
+.about-story-img {
+  overflow: hidden;
+}
+
+.about-story-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 5rem;
+}
+
+.about-text p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 1.2rem;
+}
+
+.about-quote {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.15rem;
+  color: var(--accent);
+  font-style: italic;
+  border-left: 2px solid var(--accent-light);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  line-height: 1.7;
+}
+
+/* Stats */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  text-align: center;
+  padding: 5rem 4rem;
+}
+
+.stat-item { padding: 2rem; }
+
+.stat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.5rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+}
+
+/* Awards */
+.awards-section {
+  background: var(--cream);
+  padding: 7rem 4rem;
+  text-align: center;
+}
+
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  max-width: 1000px;
+  margin: 3rem auto 0;
+}
+
+.award-item {
+  background: var(--white);
+  padding: 3rem 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.4s var(--ease-out);
+  border: 1px solid var(--border);
+}
+
+.award-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.award-icon { font-size: 2rem; margin-bottom: 1.5rem; }
+
+.award-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.award-org {
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .about-story { grid-template-columns: 1fr; }
+  .about-text { padding: 3rem 2rem; }
+  .about-stats { grid-template-columns: 1fr; padding: 3rem 2rem; }
+  .awards-grid { grid-template-columns: 1fr; }
+  .awards-section { padding: 5rem 2rem; }
+}
